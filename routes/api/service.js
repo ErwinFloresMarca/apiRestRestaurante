@@ -1,11 +1,12 @@
 var express = require('express');
 var router = express.Router();
 
-<<<<<<< HEAD
+
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   res.send('respondiendo mi primer get ----!!');
-=======
+});
+
 router.post('/divisas', function(req, res, next) {
 	var body=req.body;
 	var valorCad = body.valor;
@@ -30,7 +31,6 @@ router.post('/divisas', function(req, res, next) {
 		default: res.status(200).json({msn : "no se encontro el tipo de cambio"});
 	}
 
->>>>>>> e92afc91f1d59745cb67e46e279491de79b9cabd
 });
 
 module.exports = router;
