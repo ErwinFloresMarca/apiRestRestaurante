@@ -8,7 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var restaurantsRouter = require('./routes/api/restaurants');
 var clientsRouter = require('./routes/api/clients');
-
+var menusRouter = require('./routes/api/menus');
 const port = 3000;
 
 var app = express();
@@ -29,6 +29,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api/restaurants', restaurantsRouter);
 app.use('/api/clients', clientsRouter);
+app.use('/api/menus', menusRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

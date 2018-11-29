@@ -6,7 +6,7 @@ var fs = require('fs');
 var jwt = require("jsonwebtoken");
 
 const RESTAURANT = require('../../database/models/restaurant');
-const MENUS = require('../../database/models/menus');
+
 //const CLIENT = require("../../database/collections/client");
 //metodo inge
 function verifytoken (req, res, next) {
@@ -49,7 +49,7 @@ var upload = multer({
 
 
 //API Restaurant
-router.post("/",(req, res)=>{
+router.post("/",verifytoken ,(req, res)=>{
   var data = req.body;
   data["registerdate"]=new Date();
   var newrestaurant=new RESTAURANT(data);
