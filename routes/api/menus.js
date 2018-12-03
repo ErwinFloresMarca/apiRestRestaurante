@@ -43,10 +43,16 @@ function verifytoken (req, res, next) {
 
 router.post("/",verifytoken,(req, res)=>{
   var infomenu=req.body;
-  infomenu["registerdate"]=new Date();
   // validacion
-
+  var menudata = {
+    //idrestaurant: String,
+    name: infomenu.name,
+    price: infomenu.price,
+    description: infomenu.description,
+    registerdate: new date,
+  }
   //-------
+  infomenu["registerdate"]=new Date();
   console.log("servicio encontrado");
   var menus= new MENUS(infomenu);
   console.log("ruta del modelo encontrado");
@@ -158,6 +164,15 @@ router.get("/",(req,res)=>{
     res.status(200).json(docs);
   });
 
+});
+
+
+router.delete("", verifytoken, (req, res) => {
+  //var url = req.url;
+  var id = req.query.id;
+  MENUS.find({_id : id}).remove().exec( (err, docs) => {
+      res.status(200).json(docs);
+  });
 });
 
 module.exports = router;

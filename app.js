@@ -9,13 +9,13 @@ var usersRouter = require('./routes/users');
 var restaurantsRouter = require('./routes/api/restaurants');
 var clientsRouter = require('./routes/api/clients');
 var menusRouter = require('./routes/api/menus');
-const port = 3000;
+const port = 7777;
 
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+app.set('view engine', 'jade');//cambiar a jade
 
 app.use(logger('dev'));
 app.use(express.json());

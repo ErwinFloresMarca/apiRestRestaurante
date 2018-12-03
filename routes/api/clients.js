@@ -3,6 +3,7 @@ var multer = require('multer');
 var router = express.Router();
 var fs = require('fs');
 var jwt = require("jsonwebtoken");
+var sha1 = require('sha1');
 
 const CLIENT = require("../../database/models/client");
 
@@ -72,9 +73,54 @@ router.post("/login", (req, res, next) => {
 router.post("/", (req, res) => {
   var client = req.body;
   //Validacion de datosssss
+  var name_reg = /\w{3,}/g
+  var email_reg = /\w{1,}@[\w.]{1,}[.][a-z]{2,3}/g
+  var phone_reg = /\d{7}[0-9]/g
+  var ci_reg =/\d{1,}\w{1,3}/g
+  var password_reg =/\w{6,}/g
+  console.log(client);
+  if(client.name.match(name_reg) == null){
+    res.status(400).json({
+      msn : "el nombre de usuario no es correcto"
+    });
+    return;
+  }
+  if(client.email.match(email_reg) == null){
+    res.status(400).json({
+      msn : "el email no es correcto"
+    });
+    return;
+  }
+  if(client.password.match(password_reg) == null){
+    res.status(400).json({
+      msn : "el password no es correcto requiere mas de 6 caracteres "
+    });
+    return;
+  }
+
+  if(client.ci.match(ci_reg) == null){
+    res.status(400).json({
+      msn : "el ci no puede estar vacio"
+    });
+    return;
+  }
+  if(client.phone.match(phone_reg) == null||client.phone.length!=8){
+    res.status(400).json({
+      msn : "el telefono es incorrecto"
+    });
+    return;
+  }
+  var clientdata = {
+    name: client.name,
+    email: client.email,
+    phone: client.phone,
+    ci: client.ci,
+    password: sha1(client.password),
+    registerdate: new Date
+  };
   //Validar ojo
   client["registerdate"] = new Date();
-  var cli = new CLIENT(client);
+  var cli = new CLIENT(clientdata);
   cli.save().then((docs) => {
     res.status(200).json(docs);
   });
