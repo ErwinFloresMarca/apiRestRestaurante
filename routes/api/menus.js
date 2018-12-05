@@ -44,6 +44,8 @@ function verifytoken (req, res, next) {
 router.post("/",verifytoken,(req, res)=>{
   var infomenu=req.body;
   // validacion
+
+  //validacion
   var menudata = {
     //idrestaurant: String,
     name: infomenu.name,

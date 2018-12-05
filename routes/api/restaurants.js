@@ -50,6 +50,9 @@ var upload = multer({
 
 //API Restaurant
 router.post("/",verifytoken ,(req, res)=>{
+  //Validacion
+
+  //Validacion
   var data = req.body;
   data["registerdate"]=new Date();
   var newrestaurant=new RESTAURANT(data);

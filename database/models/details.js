@@ -5,10 +5,7 @@ const detailsSchema = Schema({
     idmenu: String,
     idorder: String,
     cantidad: Number,
-    registerdate: {
-      type: Date,
-      default: Date.now()
-    }
+    registerdate: Date
     //menu: menuSchema
 })
 

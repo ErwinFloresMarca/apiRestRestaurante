@@ -31,12 +31,12 @@ router.post("/", (req, res) => {
   var detail = req.body;
   //Validacion de datosssss
 
+  //validacion de datos
+
   var cantidad_reg = /\d{2}[0-9]/g
-
-
   if(detail.cantidad.match(cantidad_reg) == null||detail.cantidad.length>3){
     res.status(400).json({
-      msn : "Cantidad no abastesida"
+      msn : "Cantidad no abastecida"
     });
     return;
   }
