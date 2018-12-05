@@ -44,6 +44,27 @@ function verifytoken (req, res, next) {
 router.post("/",verifytoken,(req, res)=>{
   var infomenu=req.body;
   // validacion
+  var name_reg = /\w{3,}/g
+   var price_reg =/\d{1,3}\d{0,2}/g
+   var des_reg =/\w{3,}/g
+   if(infomenu.name.match(name_reg) == null){
+    res.status(200).json({
+      msn : "menu encontrada"
+    });
+    return;
+   }
+   if(infomenu.price.match(price_reg) == null){
+    res.status(200).json({
+      msn : "el precio  no puede estar vacio"
+    });
+    return;
+   }
+   if(infomenu.des.match(des_reg) == null){
+    res.status(200).json({
+      msn : "descripcion valida"
+    });
+    return;
+   }
 
   //validacion
   var menudata = {
