@@ -8,7 +8,10 @@ const ordersSchema = Schema({
     pagoTotal: String,
     lat: String,
     long: String,
-    registerdate: Date
+    registerdate: {
+      type: Date,
+      default: Date.now()
+    }
 
 })
 
