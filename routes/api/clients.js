@@ -50,6 +50,7 @@ router.post("/login", (req, res, next) => {
   var password = req.body.password;
   var result = CLIENT.findOne({email: email,password: password}).exec((err, doc) => {
     if (err) {
+      console.log("error");
       res.status(200).json({
         msn : "No se puede concretar con la peticion "
       });
@@ -57,13 +58,14 @@ router.post("/login", (req, res, next) => {
     }
     if (doc) {
       //res.status(200).json(doc);
-      jwt.sign({name: doc.email, password: doc.password}, "seponeunallavesecreta", (err, token) => {
-          console.log(err);
+      jwt.sign({name: doc.email, password: sha1(doc.password)}, "seponeunallavesecreta", (err, token) => {
+          console.log("sesion exitosa");
           res.status(200).json({
             token : token
           });
       })
     } else {
+      console.log("error enviar token");
       res.status(200).json({
         msn : "El usuario no existe ne la base de datos"
       });
@@ -98,7 +100,7 @@ router.post("/", (req, res) => {
     return;
   }
 
-  if(client.ci.match(ci_reg) == null){
+  if(client.ci==undefined || client.ci.match(ci_reg) == null){
     res.status(400).json({
       msn : "el ci no puede estar vacio"
     });
