@@ -75,13 +75,20 @@ router.post("/login", (req, res, next) => {
 router.post("/", (req, res) => {
   var client = req.body;
   //Validacion de datosssss
-  var name_reg = /\w{3,}/g
+  var firstname_reg = /\w{3,}/g
+  var surname_reg = /\w{3,}/g
   var email_reg = /\w{1,}@[\w.]{1,}[.][a-z]{2,3}/g
   var phone_reg = /\d{7}[0-9]/g
   var ci_reg =/\d{1,}\w{1,3}/g
   var password_reg =/\w{6,}/g
   console.log(client);
-  if(client.name.match(name_reg) == null){
+  if(client.firstname.match(firstname_reg) == null){
+    res.status(400).json({
+      msn : "el nombre de usuario no es correcto"
+    });
+    return;
+  }
+  if(client.surname.match(surname_reg) == null){
     res.status(400).json({
       msn : "el nombre de usuario no es correcto"
     });
@@ -127,6 +134,5 @@ router.post("/", (req, res) => {
     res.status(200).json(docs);
   });
 });
-
 
 module.exports = router;

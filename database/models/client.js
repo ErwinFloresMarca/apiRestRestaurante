@@ -2,7 +2,8 @@ const mongoose = require('../connect');
 const Schema = mongoose.Schema;
 
 const clientSchema = Schema({
-    name: String,
+    firstname: String, 
+    surname: String,
     email: String,
     phone: String,
     ci: String,
