@@ -47,8 +47,9 @@ function verifytoken (req, res, next) {
 
 router.post("/login", (req, res, next) => {
   var email = req.body.email;
-  var password = req.body.password;
-  var result = CLIENT.findOne({email: email,password: password}).exec((err, doc) => {
+  var password = req.body.password  ;
+  console.log(email,password);
+  var result = CLIENT.findOne({email: email,password: sha1(password)}).exec((err, doc) => {
     if (err) {
       console.log("error");
       res.status(200).json({
@@ -58,7 +59,7 @@ router.post("/login", (req, res, next) => {
     }
     if (doc) {
       //res.status(200).json(doc);
-      jwt.sign({name: doc.email, password: sha1(doc.password)}, "seponeunallavesecreta", (err, token) => {
+      jwt.sign({email: doc.email, password: sha1(doc.password)}, "seponeunallavesecreta", (err, token) => {
           console.log("sesion exitosa");
           res.status(200).json({
             token : token
@@ -120,7 +121,8 @@ router.post("/", (req, res) => {
     return;
   }
   var clientdata = {
-    name: client.name,
+    firstname: client.firstname,
+    surname: client.surname,
     email: client.email,
     phone: client.phone,
     ci: client.ci,
@@ -131,6 +133,18 @@ router.post("/", (req, res) => {
   client["registerdate"] = new Date();
   var cli = new CLIENT(clientdata);
   cli.save().then((docs) => {
+    res.status(200).json(docs);
+  });
+});
+router.get("/",(req, res) => {
+  
+  CLIENT.find({}).exec((err, docs) => {
+    if (err) {
+      res.status(500).json({
+        "msn" : "Error en la db"
+      });
+      return;
+    }
     res.status(200).json(docs);
   });
 });
