@@ -91,7 +91,7 @@ router.post("/", (req, res) => {
   }
   if(client.surname.match(surname_reg) == null){
     res.status(400).json({
-      msn : "el nombre de usuario no es correcto"
+      msn : "el nombre de usuario no puede ser incompleto"
     });
     return;
   }
@@ -137,7 +137,7 @@ router.post("/", (req, res) => {
   });
 });
 router.get("/",(req, res) => {
-  
+
   CLIENT.find({}).exec((err, docs) => {
     if (err) {
       res.status(500).json({
@@ -148,7 +148,7 @@ router.get("/",(req, res) => {
     res.status(200).json(docs);
   });
 });
-router.patch('/:id', function (req, res, next) {
+/*router.patch('/:id', function (req, res, next) {
   let idUser = req.params.id;
   let userData = {};
   Object.keys(req.body).forEach((key) => {
@@ -169,7 +169,43 @@ router.patch('/:id', function (req, res, next) {
           })
       }
   })
+});*/
+router.patch("/", function (req, res) {
+  var params = req.body;
+  var id = req.query.id;
+  //Collection of data
+  var keys = Object.keys(params);
+  var updatekeys = ["firstname", "surname", "email", "phone", "ci"];
+  var newkeys = [];
+  var values = [];
+  //seguridad
+  for (var i  = 0; i < updatekeys.length; i++) {
+    var index = keys.indexOf(updatekeys[i]);
+    if (index != -1) {
+        newkeys.push(keys[index]);
+        values.push(params[keys[index]]);
+    }
+  }
+  var objupdate = {}
+  for (var i  = 0; i < newkeys.length; i++) {
+      objupdate[newkeys[i]] = values[i];
+  }
+  console.log(objupdate);
+  CLIENT.findOneAndUpdate({_id: id}, objupdate ,(err, docs) => {
+    if (err) {
+      res.status(500).json({
+          msn: "Existe un error en la base de datos"
+      });
+      return;
+    }
+    var id = docs._id
+    res.status(200).json({
+      msn: id
+    })
+  });
 });
+
+
 router.delete('/:id', function (req, res, next) {
   let idUser = req.params.id;
 

@@ -90,7 +90,7 @@ router.patch("/",verifytoken ,(req, res) => {
   var id = req.query.id;
   //Collection of data
   var keys = Object.keys(params);
-  var updatekeys = ["name", "nit", "property", "street", "phone", "Lat", "Lon", "logo", "picture"];
+  var updatekeys = ["name", "nit", "property", "street", "phone", "lat", "lon", "logo", "picture"];
   var newkeys = [];
   var values = [];
   //seguridad
