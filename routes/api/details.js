@@ -27,6 +27,7 @@ function verifytoken (req, res, next) {
   }
 }
 
+
 router.post("/", (req, res) => {
   var detail = req.body;
   //Validacion de datosssss
@@ -88,4 +89,6 @@ router.get("/orders",(req,res)=>{
   });
 
 });
+
+
 module.exports = router;

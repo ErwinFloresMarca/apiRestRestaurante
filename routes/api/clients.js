@@ -34,7 +34,7 @@ function verifytoken (req, res, next) {
         if (err) {
           res.status(403).json({
             msn: "No autotizado"
-          })
+          });
         } else {
           next();
         }
@@ -147,6 +147,48 @@ router.get("/",(req, res) => {
     }
     res.status(200).json(docs);
   });
+});
+router.patch('/:id', function (req, res, next) {
+  let idUser = req.params.id;
+  let userData = {};
+  Object.keys(req.body).forEach((key) => {
+      userData[key] = req.body[key];
+  })
+
+  CLIENT.findByIdAndUpdate(idUser, userData).exec((err, result) => {
+      if (err) {
+          res.status(500).json({
+              error: err
+          });
+          return;
+      }
+      if (result) {
+          res.status(200).json({
+              message: "Se actualizaron los datos"
+
+          })
+      }
+  })
+});
+router.delete('/:id', function (req, res, next) {
+  let idUser = req.params.id;
+
+  CLIENT.remove({
+      _id: idUser
+  }).exec((err, result) => {
+      if (err) {
+          res.status(500).json({
+              error: err
+          });
+          return;
+      }
+      if (result) {
+          res.status(200).json({
+              message: "Usuario eliminado",
+              result: result
+          })
+      }
+  })
 });
 
 module.exports = router;

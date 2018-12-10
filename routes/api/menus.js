@@ -197,5 +197,27 @@ router.delete("", verifytoken, (req, res) => {
       res.status(200).json(docs);
   });
 });
+router.patch('/:id', function (req, res, next) {
+  let idUser = req.params.id;
+  let userData = {};
+  Object.keys(req.body).forEach((key) => {
+      userData[key] = req.body[key];
+  })
+
+  MENUS.findByIdAndUpdate(idUser, userData).exec((err, result) => {
+      if (err) {
+          res.status(500).json({
+              error: err
+          });
+          return;
+      }
+      if (result) {
+          res.status(200).json({
+              message: "Se actualizaron los datos"
+
+          })
+      }
+  })
+});
 
 module.exports = router;
