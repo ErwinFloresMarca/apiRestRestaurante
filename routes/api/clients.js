@@ -34,7 +34,7 @@ function verifytoken (req, res, next) {
         if (err) {
           res.status(403).json({
             msn: "No autotizado"
-          })
+          });
         } else {
           next();
         }
@@ -48,6 +48,7 @@ function verifytoken (req, res, next) {
 router.post("/login", (req, res, next) => {
   var email = req.body.email;
   var password = req.body.password;
+  console.log(email,password);
   var result = CLIENT.findOne({email: email,password: sha1(password)}).exec((err, doc) => {
     if (err) {
       console.log("error");
@@ -76,13 +77,20 @@ router.post("/login", (req, res, next) => {
 router.post("/", (req, res) => {
   var client = req.body;
   //Validacion de datosssss
-  var name_reg = /\w{3,}/g
+  var firstname_reg = /\w{3,}/g
+  var surname_reg = /\w{3,}/g
   var email_reg = /\w{1,}@[\w.]{1,}[.][a-z]{2,3}/g
   var phone_reg = /\d{7}[0-9]/g
   var ci_reg =/\d{1,}\w{1,3}/g
   var password_reg =/\w{6,}/g
   console.log(client);
-  if(client.name.match(name_reg) == null){
+  if(client.firstname.match(firstname_reg) == null){
+    res.status(400).json({
+      msn : "el nombre de usuario no es correcto"
+    });
+    return;
+  }
+  if(client.surname.match(surname_reg) == null){
     res.status(400).json({
       msn : "el nombre de usuario no es correcto"
     });
@@ -114,7 +122,8 @@ router.post("/", (req, res) => {
     return;
   }
   var clientdata = {
-    name: client.name,
+    firstname: client.firstname,
+    surname: client.surname,
     email: client.email,
     phone: client.phone,
     ci: client.ci,
@@ -128,6 +137,60 @@ router.post("/", (req, res) => {
     res.status(200).json(docs);
   });
 });
+router.get("/",(req, res) => {
 
+  CLIENT.find({}).exec((err, docs) => {
+    if (err) {
+      res.status(500).json({
+        "msn" : "Error en la base de datos"
+      });
+      return;
+    }
+    res.status(200).json(docs);
+  });
+});
+router.patch('/:id', function (req, res, next) {
+  let idUser = req.params.id;
+  let userData = {};
+  Object.keys(req.body).forEach((key) => {
+      userData[key] = req.body[key];
+  })
+
+  CLIENT.findByIdAndUpdate(idUser, userData).exec((err, result) => {
+      if (err) {
+          res.status(500).json({
+              error: err
+          });
+          return;
+      }
+      if (result) {
+          res.status(200).json({
+              message: "Se actualizaron los datos"
+
+          })
+      }
+  })
+});
+
+router.delete('/:id', function (req, res, next) {
+  let idUser = req.params.id;
+
+  CLIENT.remove({
+      _id: idUser
+  }).exec((err, result) => {
+      if (err) {
+          res.status(500).json({
+              error: err
+          });
+          return;
+      }
+      if (result) {
+          res.status(200).json({
+              message: "Usuario eliminado",
+              result: result
+          })
+      }
+  })
+});
 
 module.exports = router;

@@ -44,6 +44,27 @@ function verifytoken (req, res, next) {
 router.post("/",verifytoken,(req, res)=>{
   var infomenu=req.body;
   // validacion
+  var name_reg = /\w{3,}/g
+   var price_reg =/\d{1,3}.\d{0,2}/g
+   var des_reg =/\w{3,}/g
+   if(infomenu.name.match(name_reg) == null){
+    res.status(200).json({
+      msn : "menu  no registrado"
+    });
+    return;
+   }
+   if(infomenu.price.match(price_reg) == null){
+    res.status(200).json({
+      msn : "el precio  no establecido"
+    });
+    return;
+   }
+   if(infomenu.des.match(des_reg) == null){
+    res.status(200).json({
+      msn : "descripcion no introducida"
+    });
+    return;
+   }
 
   //validacion
   var menudata = {
@@ -113,40 +134,7 @@ router.post("/uploadmenus",verifytoken,(req,res)=>{
   });
 });
 
-router.patch("/",verifytoken,(req,res)=>{
-  var params = req.body;
-  var id = req.query.id;
-  //Collection of data
-  var keys = Object.keys(params);
-  var updatekeys = ["name", "price", "description", "picture"];
-  var newkeys = [];
-  var values = [];
-  //seguridad
-  for (var i  = 0; i < updatekeys.length; i++) {
-    var index = keys.indexOf(updatekeys[i]);
-    if (index != -1) {
-        newkeys.push(keys[index]);
-        values.push(params[keys[index]]);
-    }
-  }
-  var objupdate = {}
-  for (var i  = 0; i < newkeys.length; i++) {
-      objupdate[newkeys[i]] = values[i];
-  }
-  console.log(objupdate);
-  MENUS.findOneAndUpdate({_id: id}, objupdate ,(err, docs) => {
-    if (err) {
-      res.status(500).json({
-          msn: "Existe un error en la base de datos"
-      });
-      return;
-    }
-    var id = docs._id
-    res.status(200).json({
-      msn: docs
-    })
-  });
-});
+
 
 router.get("/",(req,res)=>{
   var skip = 0;
@@ -169,12 +157,47 @@ router.get("/",(req,res)=>{
 });
 
 
-router.delete("", verifytoken, (req, res) => {
-  //var url = req.url;
-  var id = req.query.id;
-  MENUS.find({_id : id}).remove().exec( (err, docs) => {
-      res.status(200).json(docs);
-  });
+router.delete('/:id', function (req, res, next) {
+  let idUser = req.params.id;
+
+  MENUS.remove({
+      _id: idUser
+  }).exec((err, result) => {
+      if (err) {
+          res.status(500).json({
+              error: err
+          });
+          return;
+      }
+      if (result) {
+          res.status(200).json({
+              message: "Usuario eliminado",
+              result: result
+          })
+      }
+  })
+});
+router.patch('/:id', function (req, res, next) {
+  let idUser = req.params.id;
+  let userData = {};
+  Object.keys(req.body).forEach((key) => {
+      userData[key] = req.body[key];
+  })
+
+  MENUS.findByIdAndUpdate(idUser, userData).exec((err, result) => {
+      if (err) {
+          res.status(500).json({
+              error: err
+          });
+          return;
+      }
+      if (result) {
+          res.status(200).json({
+              message: "Se actualizaron los datos"
+
+          })
+      }
+  })
 });
 
 module.exports = router;

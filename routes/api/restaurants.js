@@ -90,7 +90,7 @@ router.patch("/",verifytoken ,(req, res) => {
   var id = req.query.id;
   //Collection of data
   var keys = Object.keys(params);
-  var updatekeys = ["name", "nit", "property", "street", "phone", "Lat", "Lon", "logo", "picture"];
+  var updatekeys = ["name", "nit", "owner", "street", "phone", "lat", "lon", "logo", "picture"];
   var newkeys = [];
   var values = [];
   //seguridad
@@ -155,4 +155,26 @@ router.post("/uploadrestaurant",verifytoken ,(req, res) => {
   });
 });
 
+
+
+router.delete('/:id', function (req, res, next) {
+  let idUser = req.params.id;
+
+  RESTAURANT.remove({
+      _id: idUser
+  }).exec((err, result) => {
+      if (err) {
+          res.status(500).json({
+              error: err
+          });
+          return;
+      }
+      if (result) {
+          res.status(200).json({
+              message: "Usuario eliminado",
+              result: result
+          })
+      }
+  })
+});
 module.exports = router;
