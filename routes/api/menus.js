@@ -80,7 +80,7 @@ router.post("/",verifytoken,(req, res)=>{
   console.log("ruta del modelo encontrado");
   menus.save().then((rr)=>{
       res.status(200).json({
-        "id":rr.id;
+        "id":rr.id,
         "msn": "item agregado con exito"
       });
   });
