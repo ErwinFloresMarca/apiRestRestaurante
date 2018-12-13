@@ -68,7 +68,7 @@ router.post("/",verifytoken,(req, res)=>{
 
   //validacion
   var menudata = {
-    //idrestaurant: String,
+    idrestaurant: req.body.idrestaurant,
     name: infomenu.name,
     price: infomenu.price,
     description: infomenu.description
