@@ -48,7 +48,7 @@ function verifytoken (req, res, next) {
 router.post("/login", (req, res, next) => {
   var email = req.body.email;
   var password = req.body.password;
-  var result = CLIENT.findOne({email: email,password: password}).exec((err, doc) => {
+  var result = CLIENT.findOne({email: email,password: sha1(password)}).exec((err, doc) => {
     if (err) {
       console.log("error");
       res.status(200).json({
@@ -58,9 +58,10 @@ router.post("/login", (req, res, next) => {
     }
     if (doc) {
       //res.status(200).json(doc);
-      jwt.sign({name: doc.email, password: sha1(doc.password)}, "seponeunallavesecreta", (err, token) => {
+      jwt.sign({name: doc.email, password: doc.password}, "seponeunallavesecreta", (err, token) => {
           console.log("sesion exitosa");
           res.status(200).json({
+            id : doc._id,
             token : token
           });
       })

@@ -50,8 +50,7 @@ router.post("/",verifytoken,(req, res)=>{
     //idrestaurant: String,
     name: infomenu.name,
     price: infomenu.price,
-    description: infomenu.description,
-    registerdate: new date,
+    description: infomenu.description
   }
   //-------
   infomenu["registerdate"]=new Date();
@@ -60,6 +59,7 @@ router.post("/",verifytoken,(req, res)=>{
   console.log("ruta del modelo encontrado");
   menus.save().then((rr)=>{
       res.status(200).json({
+        "id":rr.id;
         "msn": "item agregado con exito"
       });
   });
@@ -101,7 +101,7 @@ router.post("/uploadmenus",verifytoken,(req,res)=>{
           res.status(200).json(docs);
         });
         res.status(200).json({
-          "msn": "imagen subido con exito"
+          "msn": "OK"
         });
       });
     }else{
