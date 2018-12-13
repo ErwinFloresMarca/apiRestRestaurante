@@ -190,12 +190,25 @@ router.get("/",(req,res)=>{
 });
 
 
-router.delete("", verifytoken, (req, res) => {
-  //var url = req.url;
-  var id = req.query.id;
-  MENUS.find({_id : id}).remove().exec( (err, docs) => {
-      res.status(200).json(docs);
-  });
+router.delete('/:id', function (req, res, next) {
+  let idUser = req.params.id;
+
+  MENUS.remove({
+      _id: idUser
+  }).exec((err, result) => {
+      if (err) {
+          res.status(500).json({
+              error: err
+          });
+          return;
+      }
+      if (result) {
+          res.status(200).json({
+              message: "Usuario eliminado",
+              result: result
+          })
+      }
+  })
 });
 router.patch('/:id', function (req, res, next) {
   let idUser = req.params.id;
